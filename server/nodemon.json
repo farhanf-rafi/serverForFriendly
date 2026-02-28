@@ -1,0 +1,7 @@
+{
+  "watch": ["*.js", "routes", "views", ".env", "db.js"],
+  "ext": "js,json,jade,env",
+  "ignore": ["node_modules", "public"],
+  "delay": "500",
+  "verbose": true
+}

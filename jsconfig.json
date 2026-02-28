@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2020",
+    "checkJs": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "typeRoots": ["./node_modules/@types", "./types"]
+  },
+  "include": ["**/*.js", "**/*.d.ts"],
+
+  "exclude": ["node_modules", "**/node_modules/*"]
+}
