@@ -46,7 +46,7 @@ const loginUser = handler(async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Login successful',
-      token,
+      data:token
     });
   } catch (err) {
     console.error(`[LOGIN] Error: ${err.message}`);
