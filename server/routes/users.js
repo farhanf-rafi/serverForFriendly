@@ -18,7 +18,7 @@ router.post('/login', loginUser);
 router.get('/get-all-user', getAllUser);
 
 //ownProfile
-router.get('/profile/edit-my-profile', auth, getOwnProfile);
-router.put('/profile/get-my-profile', auth, editOwnProfile);
+router.get('/profile/get-my-profile', auth, getOwnProfile);
+router.put('/profile/edit-my-profile', auth, editOwnProfile);
 
 module.exports = router;
