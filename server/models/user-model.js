@@ -6,6 +6,8 @@ var userSchema = new mongoose.Schema({
   userEmail: { type: String, required: true, unique: true },
   userPassword: { type: String, required: true },
   userPhoneNumber: String,
+  fullName: String,
+  bio: String,
 });
 
 userSchema.pre('save', async function () {

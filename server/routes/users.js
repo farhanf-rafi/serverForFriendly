@@ -5,10 +5,20 @@ const {
   registerUser,
   getAllUser,
   loginUser,
+  getOwnProfile,
+  editOwnProfile,
 } = require('../controllers/user-controller');
 
-router.get('/get-all-user', getAllUser);
+//auth
 router.post('/reg-user', registerUser);
 router.post('/login', loginUser);
+
+//all
+router.get('/get-all-user', getAllUser);
+
+
+//ownProfile
+router.get("/profile/:userId",getOwnProfile)
+router.put("/profile/:userId",editOwnProfile)
 
 module.exports = router;

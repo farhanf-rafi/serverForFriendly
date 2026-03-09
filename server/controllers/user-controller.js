@@ -1,6 +1,8 @@
+const { get } = require('node:http');
 var User = require('../models/user-model');
 var handler = require('../utils/handler');
 const jwt = require('jsonwebtoken');
+const { json } = require('node:stream/consumers');
 
 const loginUser = handler(async (req, res) => {
   try {
@@ -46,9 +48,9 @@ const loginUser = handler(async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Login successful',
-      data:{
-        token
-      }
+      data: {
+        token,
+      },
     });
   } catch (err) {
     console.error(`[LOGIN] Error: ${err.message}`);
@@ -79,11 +81,18 @@ const registerUser = handler(async (req, res) => {
       userEmail,
     });
 
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error('JWT_SECRET is not defined');
+    }
+
+    const token = jwt.sign({ id: newUser._id }, secret, { expiresIn: '7d' });
+
     console.log(`[REGISTER] Success | userId: ${newUser._id}`);
     res.status(201).json({
       success: true,
       message: 'User Registered Successfully',
-      data: newUser,
+      data: { token },
     });
   } catch (err) {
     console.error(`[REGISTER] Error: ${err.message}`);
@@ -104,4 +113,59 @@ const getAllUser = handler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, getAllUser, loginUser };
+const getOwnProfile = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const userProfile = await User.findById(userId).select('-userPassword');
+    if (!userProfile) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Profile fetched',
+      data: { userProfile },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+var editOwnProfile = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { userName, userEmail, userPhoneNumber, fullName, bio } = req.body;
+
+    const userProfile = await User.findByIdAndUpdate(
+      userId,
+      { userName, userEmail, userPhoneNumber, fullName, bio },
+      { new: true, runValidators: true }
+    ).select('-userPassword');
+
+    if (!userProfile) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Profile updated',
+      data: { userProfile },
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+module.exports = {
+  registerUser,
+  getAllUser,
+  loginUser,
+  getOwnProfile,
+  editOwnProfile,
+};
