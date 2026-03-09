@@ -115,7 +115,7 @@ const getAllUser = handler(async (req, res) => {
 
 const getOwnProfile = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
 
     const userProfile = await User.findById(userId).select('-userPassword');
     if (!userProfile) {
@@ -136,7 +136,7 @@ const getOwnProfile = async (req, res) => {
 
 var editOwnProfile = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
     const { userName, userEmail, userPhoneNumber, fullName, bio } = req.body;
 
     const userProfile = await User.findByIdAndUpdate(
