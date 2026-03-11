@@ -7,6 +7,7 @@ const {
   loginUser,
   getOwnProfile,
   editOwnProfile,
+  searchPeople,
 } = require('../controllers/user-controller');
 const { auth } = require('../middlewares/auth');
 
@@ -14,8 +15,9 @@ const { auth } = require('../middlewares/auth');
 router.post('/reg-user', registerUser);
 router.post('/login', loginUser);
 
-//all
-router.get('/get-all-user', getAllUser);
+//users
+router.get('/get-all-user', auth, getAllUser);
+router.get('/search',  searchPeople);
 
 //ownProfile
 router.get('/profile/get-my-profile', auth, getOwnProfile);

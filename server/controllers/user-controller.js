@@ -100,12 +100,14 @@ const registerUser = handler(async (req, res) => {
   }
 });
 
+//all users
 const getAllUser = handler(async (req, res) => {
   try {
     const allUsers = await User.find().select('-userPassword');
 
     res.status(200).json({
       success: true,
+      message: 'Fetched Users',
       data: allUsers,
     });
   } catch (err) {
@@ -113,6 +115,38 @@ const getAllUser = handler(async (req, res) => {
   }
 });
 
+//search users
+
+var searchPeople = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q || q.trim() === '') {
+      return res
+        .status(400)
+        .json({ success: false, message: 'Query parameter "q" is required' });
+    }
+
+    const regex = new RegExp(q.trim(), 'i');
+
+    const users = await User.find({
+      $or: [
+        { userName: regex },
+        { fullName: regex },
+        { userEmail: regex },
+        { userPhoneNumber: regex },
+      ],
+    }).select('-userPassword');
+
+    res
+      .status(200)
+      .json({ success: true, message: 'Search results', data: users });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+//profile controller
 const getOwnProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -168,4 +202,5 @@ module.exports = {
   loginUser,
   getOwnProfile,
   editOwnProfile,
+  searchPeople,
 };
