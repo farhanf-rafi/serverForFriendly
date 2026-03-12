@@ -32,8 +32,7 @@ const sendRequest = handler(async (req, res) => {
         data: existingRelationship,
       });
     }
-
-    const newRelationship = await Relationship.create({
+    await Relationship.create({
       user1: senderId,
       user2: receiverId,
       status: 'pending',
@@ -46,7 +45,6 @@ const sendRequest = handler(async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Friend request sent successfully',
-      data: newRelationship,
     });
   } catch (err) {
     console.error(`[FRIEND REQUEST] Error: ${err.message}`);

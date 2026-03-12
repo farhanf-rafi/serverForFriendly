@@ -17,7 +17,7 @@ router.post('/login', loginUser);
 
 //users
 router.get('/get-all-user', auth, getAllUser);
-router.get('/search',  searchPeople);
+router.get('/search', auth, searchPeople);
 
 //ownProfile
 router.get('/profile/get-my-profile', auth, getOwnProfile);
