@@ -39,9 +39,7 @@ const sendRequest = handler(async (req, res) => {
       actionBy: senderId,
     });
 
-    console.log(
-      `[FRIEND REQUEST] Sent | from: ${senderId} -> to: ${receiverId} | id: ${newRelationship._id}`
-    );
+
     res.status(201).json({
       success: true,
       message: 'Friend request sent successfully',
@@ -101,7 +99,7 @@ const acceptRequest = handler(async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Friend request accepted',
-      data: relationship,
+    
     });
   } catch (err) {
     console.error(`[ACCEPT REQUEST] Error: ${err.message}`);
