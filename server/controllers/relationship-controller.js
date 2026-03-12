@@ -118,7 +118,7 @@ const getAllPendingRequest = handler(async (req, res) => {
     const requests = await Relationship.find({
       status: 'pending',
       $or: [{ user1: userId }, { user2: userId }],
-    }).populate('user1 user2', 'userName userEmail');
+    }).populate('user1 user2', 'userName userEmail fullName');
 
     // Only show requests where user is the recipient (not the one who sent it)
     const pending = requests
