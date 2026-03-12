@@ -75,10 +75,11 @@ const registerUser = handler(async (req, res) => {
     }
 
     console.log(`[REGISTER] New user: ${userEmail}`);
+
     const newUser = await User.create({
       userName,
-      userPassword,
       userEmail,
+      userPassword
     });
 
     const secret = process.env.JWT_SECRET;

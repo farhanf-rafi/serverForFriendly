@@ -127,14 +127,10 @@ const getAllPendingRequest = handler(async (req, res) => {
         const sender = rel.user1._id.equals(rel.actionBy)
           ? rel.user1
           : rel.user2;
-        const receiver = rel.user1._id.equals(rel.actionBy)
-          ? rel.user2
-          : rel.user1;
         return {
           _id: rel._id,
           status: rel.status,
           sender,
-          receiver,
           createdAt: rel.createdAt,
           updatedAt: rel.updatedAt,
         };
