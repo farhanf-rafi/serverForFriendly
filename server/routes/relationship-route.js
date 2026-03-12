@@ -7,7 +7,7 @@ const {
 const { auth } = require('../middlewares/auth');
 const router = express.Router();
 
-router.post('/request', auth, sendRequest);
+router.post('/send-request', auth, sendRequest);
 router.put('/accept/:relationshipId', auth, acceptRequest);
 router.get('/pending', auth, getAllPendingRequest);
 
