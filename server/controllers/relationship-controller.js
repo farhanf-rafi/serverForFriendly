@@ -150,4 +150,41 @@ const getAllPendingRequest = handler(async (req, res) => {
   }
 });
 
-module.exports = { sendRequest, acceptRequest, getAllPendingRequest };
+
+const getAllFriend =handler( async (req, res) => {
+  try {
+   if (!req.user) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const userId = req.user.id;
+
+    const relationships = await Relationship.find({
+      status: 'accepted',
+      $or: [{ user1: userId }, { user2: userId }],
+    }).populate('user1 user2', 'userName userEmail fullName ');
+
+    const friends = relationships.map((rel) => {
+      const friend = rel.user1._id.equals(userId) ? rel.user2 : rel.user1;
+      return {
+        relationshipId: rel._id,
+        friend,
+        createdAt: rel.createdAt,
+        updatedAt: rel.updatedAt,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Fetched friends',
+      data: friends,
+    });
+  } catch (err) {
+    res.status(500).json({success:false, message: err.message });
+  }
+})
+
+
+
+
+module.exports = { sendRequest, acceptRequest, getAllPendingRequest, getAllFriend };
